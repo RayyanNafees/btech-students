@@ -21,7 +21,7 @@
         placeholder="Search by Name, Email, Phone No, Serial No."
         hx-request='{"noHeaders": true}'
         hx-get="https://opensheet.elk.sh/1ngRi2HTDztn_EKxL912kH0s3p7-Y04x35GEposNee2A/sheet1"
-        hx-trigger="input delay:100ms"
+        hx-trigger="input delay:500ms"
         hx-target="tbody"
         hx-ext="client-side-templates"
         handlebars-array-template="tabify"
@@ -49,39 +49,33 @@
       <progress class="htmx-indicator"></progress>
     </main>
     <script type="module">
-        if ('serviceWorker' in navigator) {
-          try {
-            const registration = await navigator.serviceWorker.register('sw.js')
-            console.log(
-              'Service Worker registered with scope:',
-              registration.scope
-            )
-            const h2 = document.querySelector('hgroup > h2')
-            h2.innerHTML += ' - <i>Works Offline as well!</i>'
-          } catch (error) {
-            console.error('Service Worker registration failed:', error)
-          }
+      if ('serviceWorker' in navigator) {
+        try {
+          const registration = await navigator.serviceWorker.register('sw.js')
+          console.log(
+            'Service Worker registered with scope:',
+            registration.scope
+          )
+          const h2 = document.querySelector('hgroup > h2')
+          h2.innerHTML += ' - <i>Works Offline as well!</i>'
+        } catch (error) {
+          console.error('Service Worker registration failed:', error)
         }
+      }
     </script>
     <script>
       const searchIn = (term, obj, fields) => {
         const lower_fields = fields.map((f) => String(obj[f]).toLowerCase())
         const lower_term = String(term).toLowerCase()
-        for (const field of lower_fields) {
-          if (field.includes(lower_term)) {
-            console.log(field)
-            return true
-          } else {
-            console.log({ field })
-          }
-        }
+        for (const field of lower_fields)
+          if (field.includes(lower_term)) return true
+
         return false
       }
 
       Handlebars.registerHelper('isSearched', (el) => {
         const searchVal = document.querySelector('input[type="search"]').value
-        if (!searchVal) return true
-        return searchIn(searchVal, el, [
+        return (!searchVal) || searchIn(searchVal, el, [
           'Name',
           'email id',
           'Mobile No',
