@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Students Search</title>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico" />
+    <script src="https://unpkg.com/htmx.org"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/client-side-templates"></script>
+    <script src="https://unpkg.com/handlebars/dist/handlebars.min.js"></script>
+  </head>
+  <body>
+    <main class="container">
+      <hgroup>
+        <h1>ZHCET Students</h1>
+      </hgroup>
+      <input
+        type="search"
+        id="search"
+        placeholder="Search by Name, Email, Phone No, Serial No."
+        hx-request='{"noHeaders": true}'
+        hx-get="https://opensheet.elk.sh/1ngRi2HTDztn_EKxL912kH0s3p7-Y04x35GEposNee2A/sheet1"
+        hx-trigger="input delay:100ms"
+        hx-target="tbody"
+        hx-ext="client-side-templates"
+        handlebars-array-template="tabify"
+        hx-indicator=".htmx-indicator"
+      />
+      <table class="overflow-auto">
+        <thead>
+          <tr>
+            <!-- "Class":"A1A","S.No":"1","Mobile No":"9599100695","email id":"tan.nhpc@gmail.com"} -->
+            <th>Name</th>
+            <th>Faculty</th>
+            <th>Enroll</th>
+            <th>Class</th>
+            <th>Serial</th>
+            <th>Phone</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+      <progress class="htmx-indicator"></progress>
+    </main>
+    <script>
+      const searchIn = (term, obj, fields) => {
+        const lower_fields = fields.map((f) => String(obj[f]).toLowerCase())
+        const lower_term = String(term).toLowerCase()
+        for (const field of lower_fields){
+          if (field.includes(lower_term)) {
+            console.log(field)
+            return true
+          }else {console.log({field})}}
+        return false
+      }
+
+      Handlebars.registerHelper('isSearched', (el) => {
+        const searchVal = document.querySelector('input[type="search"]').value
+        if (!searchVal) return true
+        return searchIn(searchVal, el, [
+          'Name',
+          'email id',
+          'Mobile No',
+          'S.No',
+        ])
+      })
+    </script>
+    <template id="tabify">
+      {{#each this}} {{#if (isSearched this)}}
+      <tr>
+        <td>{{Name}}</td>
+        <td>{{'Faculty No.'}}</td>
+        <td>{{'En.No.'}}</td>
+        <td>{{Class}}</td>
+        <td>{{'S.No'}}</td>
+        <td>{{'Mobile No'}}</td>
+        <td>{{'email id'}}</td>
+      </tr>
+
+      {{/if}} {{/each}}
+    </template>
+  </body>
+</html>
