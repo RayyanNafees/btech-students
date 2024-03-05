@@ -48,8 +48,7 @@
       </table>
       <progress class="htmx-indicator"></progress>
     </main>
-    <script>
-      async function registerWorker() {
+    <script type="module">
         if ('serviceWorker' in navigator) {
           try {
             const registration = await navigator.serviceWorker.register('sw.js')
@@ -63,8 +62,6 @@
             console.error('Service Worker registration failed:', error)
           }
         }
-      }
-      registerWorker()
     </script>
     <script>
       const searchIn = (term, obj, fields) => {
