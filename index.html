@@ -13,6 +13,7 @@
     <main class="container">
       <hgroup>
         <h1>ZHCET Students</h1>
+        <h2>B.Tech 1st Year (2023-27)</h2>
       </hgroup>
       <input
         type="search"
@@ -47,15 +48,35 @@
       </table>
       <progress class="htmx-indicator"></progress>
     </main>
+    <script async>
+      if ("serviceWorker" in navigator) {
+        try {
+          const registration = await navigator.serviceWorker.register(
+            "sw.js"
+          );
+          console.log(
+            "Service Worker registered with scope:",
+            registration.scope
+          );
+          const h2 = document.querySelector('hgroup > h2')
+          h2.innerHTML += ' - <i>Works Offline as well!</i>'
+        } catch (error) {
+          console.error("Service Worker registration failed:", error);
+        }
+      }
+    </script>
     <script>
       const searchIn = (term, obj, fields) => {
         const lower_fields = fields.map((f) => String(obj[f]).toLowerCase())
         const lower_term = String(term).toLowerCase()
-        for (const field of lower_fields){
+        for (const field of lower_fields) {
           if (field.includes(lower_term)) {
             console.log(field)
             return true
-          }else {console.log({field})}}
+          } else {
+            console.log({ field })
+          }
+        }
         return false
       }
 
