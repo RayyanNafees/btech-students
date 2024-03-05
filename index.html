@@ -48,22 +48,23 @@
       </table>
       <progress class="htmx-indicator"></progress>
     </main>
-    <script async>
-      if ("serviceWorker" in navigator) {
-        try {
-          const registration = await navigator.serviceWorker.register(
-            "sw.js"
-          );
-          console.log(
-            "Service Worker registered with scope:",
-            registration.scope
-          );
-          const h2 = document.querySelector('hgroup > h2')
-          h2.innerHTML += ' - <i>Works Offline as well!</i>'
-        } catch (error) {
-          console.error("Service Worker registration failed:", error);
+    <script>
+      async function registerWorker() {
+        if ('serviceWorker' in navigator) {
+          try {
+            const registration = await navigator.serviceWorker.register('sw.js')
+            console.log(
+              'Service Worker registered with scope:',
+              registration.scope
+            )
+            const h2 = document.querySelector('hgroup > h2')
+            h2.innerHTML += ' - <i>Works Offline as well!</i>'
+          } catch (error) {
+            console.error('Service Worker registration failed:', error)
+          }
         }
       }
+      registerWorker()
     </script>
     <script>
       const searchIn = (term, obj, fields) => {
